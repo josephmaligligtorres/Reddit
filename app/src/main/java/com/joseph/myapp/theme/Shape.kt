@@ -1,4 +1,4 @@
-package com.joseph.myapp.ui.theme
+package com.joseph.myapp.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

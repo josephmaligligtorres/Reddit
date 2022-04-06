@@ -8,17 +8,31 @@ plugins {
 android {
     compileSdk 32
 
+    def appConstantsFile = rootProject.file('configs/appConstants.properties')
+    def appConstants = new Properties()
+    appConstants.load(new FileInputStream(appConstantsFile))
+
+    def appVersionsFile = rootProject.file('configs/appVersions.properties')
+    def appVersions = new Properties()
+    appVersions.load(new FileInputStream(appVersionsFile))
+
     defaultConfig {
         applicationId "com.joseph.myapp"
         minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode appVersions['VERSION_CODE'].toInteger()
+        versionName appVersions['VERSION_NAME']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField 'String', 'BASE_AUTH_API_URL', appConstants['BASE_AUTH_API_URL']
+        buildConfigField 'String', 'BASE_DATA_API_URL', appConstants['BASE_DATA_API_URL']
+        buildConfigField 'String', 'REFRESH_TOKEN', appConstants['REFRESH_TOKEN']
+        buildConfigField 'String', 'CLIENT_ID', appConstants['CLIENT_ID']
+        buildConfigField 'String', 'CLIENT_SECRET', appConstants['CLIENT_SECRET']
     }
 
     buildTypes {
@@ -111,16 +125,23 @@ dependencies {
     }
 
     /**
-     * SMS
-     */
-    def auth_api_phone_version = '18.0.1'
-    def auth_version = '20.1.0'
-    implementation "com.google.android.gms:play-services-auth-api-phone:$auth_api_phone_version"
-    implementation "com.google.android.gms:play-services-auth:$auth_version"
-
-    /**
      * Coroutines
      */
     def coroutines_version = '1.5.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+
+    /**
+     * Secured preferences
+     */
+    def secured_prefs_version = '0.1.7'
+    implementation "com.scottyab:secure-preferences-lib:$secured_prefs_version"
+
+    /**
+     * Database
+     */
+    def room_version = '2.4.1'
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }

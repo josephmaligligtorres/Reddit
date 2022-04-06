@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyApp</string>
+
+    <string name="network_error_EOFException_message">No response from server.</string>
+    <string name="network_error_SocketTimeoutException_message">Server connection timeout.</string>
+    <string name="network_error_OutOfMemoryError_message">Not enough memory.</string>
+    <string name="network_error_SSLException_message">Certificate pinning failure.</string>
+    <string name="network_error_else_message">You\'re currently offline! Please check your internet connection and try again.</string>
+    <string name="unknown_error_JsonSyntaxException_message">Invalid response.</string>
+    <string name="unknown_error_else_message">An unexpected error occurred\nSorry for the inconvenience.</string>
 </resources>

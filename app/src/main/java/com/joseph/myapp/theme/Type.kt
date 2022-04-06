@@ -1,4 +1,4 @@
-package com.joseph.myapp.ui.theme
+package com.joseph.myapp.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
