@@ -1,21 +1,19 @@
 package com.joseph.myapp.ui.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.joseph.myapp.helper.TriggeredEffect
 import com.joseph.myapp.theme.MyTheme
+import com.joseph.myapp.ui.common.TopBar
 
 @Composable
 fun MainScreen(
@@ -34,7 +32,8 @@ fun MainScreen(
 
         MainContent(
             uiState = uiState,
-            onLoadSubreddits = onLoadSubreddits
+            onLoadSubreddits = onLoadSubreddits,
+            onSearchInputChanged = {}
         )
     }
 }
@@ -42,18 +41,21 @@ fun MainScreen(
 @Composable
 fun MainContent(
     uiState: MainUiState,
-    onLoadSubreddits: () -> Unit
+    onLoadSubreddits: () -> Unit,
+    onSearchInputChanged: (String) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .background(Color.Red)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(onClick = onLoadSubreddits) {
-            Text(text = "Click")
+    Scaffold(
+        topBar = {
+            TopBar(
+                onSearchInputChanged = onSearchInputChanged
+            )
         }
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color(0xFFEFF7FF))
+                .fillMaxSize()
+        )
     }
 }
 
@@ -63,7 +65,8 @@ private fun Preview() {
     MyTheme {
         MainContent(
             uiState = MainUiState(),
-            onLoadSubreddits = {}
+            onLoadSubreddits = {},
+            onSearchInputChanged = {}
         )
     }
 }
