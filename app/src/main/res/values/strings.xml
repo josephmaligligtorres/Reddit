@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyApp</string>
+    <string name="app_name">Reddit</string>
 
     <string name="network_error_EOFException_message">No response from server.</string>
     <string name="network_error_SocketTimeoutException_message">Server connection timeout.</string>
