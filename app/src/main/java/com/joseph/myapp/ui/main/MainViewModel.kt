@@ -5,12 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joseph.myapp.helper.ResponseResult
 import com.joseph.myapp.navigation.NavDirection
+import com.joseph.myapp.use_case.GetAllRedditsUseCase
 import com.joseph.myapp.use_case.GetSubredditsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +26,8 @@ data class MainUiState(
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getSubredditsUseCase: GetSubredditsUseCase
+    private val getSubredditsUseCase: GetSubredditsUseCase,
+    private val getAllRedditsUseCase: GetAllRedditsUseCase
 ) : ViewModel() {
     private lateinit var navDirection: NavDirection
     private val viewModelState = MutableStateFlow(MainUiState())
@@ -51,11 +54,6 @@ class MainViewModel @Inject constructor(
             }
 
             when (val result = withContext(Dispatchers.IO) { getSubredditsUseCase() }) {
-                is ResponseResult.Success -> {
-                    for (i in result.data.data.children) {
-                        Log.e("puke", "${i.data.title} - ${i.data.name}")
-                    }
-                }
                 is ResponseResult.Error -> {
                     viewModelState.update {
                         it.copy(
@@ -70,6 +68,16 @@ class MainViewModel @Inject constructor(
                 it.copy(
                     isLoadingSubreddits = false
                 )
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            getAllRedditsUseCase().collect {
+                for (i in it) {
+                    Log.e("suso", i.toString())
+                }
             }
         }
     }

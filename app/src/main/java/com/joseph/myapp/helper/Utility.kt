@@ -22,7 +22,6 @@ import okhttp3.internal.platform.Platform
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import timber.log.Timber
 import java.io.EOFException
 import java.lang.ref.WeakReference
 import java.lang.reflect.Field
@@ -92,9 +91,6 @@ fun createHttpBuilder(): OkHttpClient.Builder {
 }
 
 fun decodeUnknownError(throwable: Throwable, context: WeakReference<Context>): String {
-    Timber.e(throwable.javaClass.simpleName)
-    Timber.e(throwable.message.toString())
-
     return when (throwable) {
         is JsonSyntaxException -> {
             context.getString(R.string.unknown_error_JsonSyntaxException_message)
@@ -106,9 +102,6 @@ fun decodeUnknownError(throwable: Throwable, context: WeakReference<Context>): S
 }
 
 fun decodeNetworkError(throwable: Throwable, context: WeakReference<Context>): String {
-    Timber.e(throwable.javaClass.simpleName)
-    Timber.e(throwable.message.toString())
-
     return when (throwable) {
         is EOFException -> {
             context.getString(R.string.network_error_EOFException_message)

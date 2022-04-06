@@ -4,6 +4,9 @@ import android.content.Context
 import com.joseph.myapp.BuildConfig
 import com.joseph.myapp.api.AuthApi
 import com.joseph.myapp.api.DataApi
+import com.joseph.myapp.data.local.AppDatabase
+import com.joseph.myapp.data.local.RedditDao
+import com.joseph.myapp.repository.RedditLocalDataSource
 import com.joseph.myapp.repository.RedditRemoteDataSource
 import com.joseph.myapp.repository.RedditRepository
 import com.joseph.myapp.repository.RedditRepositoryImpl
@@ -56,14 +59,31 @@ object HiltModule {
     fun providesRedditRepository(
         authApi: AuthApi,
         dataApi: DataApi,
+        redditDao: RedditDao,
         context: WeakReference<Context>
     ): RedditRepository {
         return RedditRepositoryImpl(
             remoteDataSource = RedditRemoteDataSource(
                 authApi = authApi,
                 dataApi = dataApi,
+                redditDao = redditDao,
                 context = context
+            ),
+            localDataSource = RedditLocalDataSource(
+                redditDao = redditDao
             )
         )
+    }
+
+    @Singleton
+    @Provides
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return AppDatabase.getDatabase(context)
+    }
+
+    @Singleton
+    @Provides
+    fun providesRedditDao(appDatabase: AppDatabase): RedditDao {
+        return appDatabase.getRedditDao()
     }
 }

@@ -1,11 +1,27 @@
 package com.joseph.myapp.data
 
 import com.google.gson.annotations.SerializedName
+import com.joseph.myapp.data.local.Reddit
 
 data class SubredditsResponse(
     val kind: String,
     val data: SubredditsResponseData
-)
+) {
+    fun toReddits(): List<Reddit> {
+        val reddits = mutableListOf<Reddit>()
+        data.children.map {
+            reddits.add(
+                Reddit(
+                    id = 0,
+                    uniqueId = it.data.name,
+                    title = it.data.title,
+                    description = it.data.publicDescription
+                )
+            )
+        }
+        return reddits
+    }
+}
 
 data class SubredditsResponseData(
     val after: String,
