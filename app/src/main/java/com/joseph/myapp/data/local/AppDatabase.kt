@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.joseph.myapp.BuildConfig
 
 @Database(
     entities = [Reddit::class],
-    version = 1
+    version = BuildConfig.DATABASE_VERSION
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRedditDao(): RedditDao
@@ -27,7 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val newInstance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "HelloWorld"
+                    BuildConfig.DATABASE_NAME
                 ).build()
                 instance = newInstance
                 return newInstance

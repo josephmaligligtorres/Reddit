@@ -33,6 +33,9 @@ android {
         buildConfigField 'String', 'REFRESH_TOKEN', appConstants['REFRESH_TOKEN']
         buildConfigField 'String', 'CLIENT_ID', appConstants['CLIENT_ID']
         buildConfigField 'String', 'CLIENT_SECRET', appConstants['CLIENT_SECRET']
+        buildConfigField 'String', 'DATABASE_NAME', appConstants['DATABASE_NAME']
+        buildConfigField 'String', 'DATABASE_TABLE_NAME', appConstants['DATABASE_TABLE_NAME']
+        buildConfigField 'int', 'DATABASE_VERSION', appVersions['DATABASE_VERSION']
     }
 
     buildTypes {

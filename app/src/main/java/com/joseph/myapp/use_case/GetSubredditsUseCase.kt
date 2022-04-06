@@ -1,6 +1,6 @@
 package com.joseph.myapp.use_case
 
-import com.joseph.myapp.data.SubredditsResponse
+import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.helper.ResponseResult
 import com.joseph.myapp.repository.RedditRepository
 import javax.inject.Inject

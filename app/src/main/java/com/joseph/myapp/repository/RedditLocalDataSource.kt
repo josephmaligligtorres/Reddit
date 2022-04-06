@@ -1,7 +1,7 @@
 package com.joseph.myapp.repository
 
-import com.joseph.myapp.data.RefreshTokenResponse
-import com.joseph.myapp.data.SubredditsResponse
+import com.joseph.myapp.data.remote.RefreshTokenResponse
+import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.data.local.RedditDao
 import com.joseph.myapp.helper.ResponseResult
