@@ -130,6 +130,7 @@ fun TopBar(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         keyboard?.hide()
+                        focusManager.clearFocus()
                     }
                 )
             )
