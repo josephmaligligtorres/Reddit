@@ -58,7 +58,7 @@ fun MainScreen(
         MainContent(
             uiState = uiState,
             onLoadSubreddits = onLoadSubreddits,
-            onSearchInputChanged = {}
+            onSearchInputChanged = onSearchInputChanged
         )
     }
 }
@@ -72,6 +72,7 @@ fun MainContent(
     Scaffold(
         topBar = {
             TopBar(
+                searchInput = uiState.searchInput,
                 onSearchInputChanged = onSearchInputChanged
             )
         }

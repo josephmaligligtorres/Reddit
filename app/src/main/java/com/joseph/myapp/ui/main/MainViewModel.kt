@@ -21,6 +21,7 @@ import kotlinx.coroutines.withContext
 data class MainUiState(
     val reddits: List<Reddit> = listOf(),
     val isLoadingSubreddits: Boolean = false,
+    val searchInput: String = "",
     val errorMessage: String = "",
     val errorTrigger: Boolean = false
 )
@@ -66,6 +67,14 @@ class MainViewModel @Inject constructor(
                     isLoadingSubreddits = false
                 )
             }
+        }
+    }
+
+    val onSearchInputChanged: (String) -> Unit = { searchInput ->
+        viewModelState.update {
+            it.copy(
+                searchInput = searchInput
+            )
         }
     }
 
