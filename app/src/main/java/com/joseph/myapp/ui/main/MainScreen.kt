@@ -117,9 +117,15 @@ fun MainContent(
                             }
                         }
                     } else {
-                        items(uiState.reddits.size) { index ->
+                        val result = if (uiState.searchInput.isNotEmpty()) {
+                            uiState.searchedReddits
+                        } else {
+                            uiState.reddits
+                        }
+
+                        items(result.size) { index ->
                             RedditItem(
-                                reddit = uiState.reddits[index]
+                                reddit = result[index]
                             )
                         }
                     }

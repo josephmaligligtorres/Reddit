@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 
 data class MainUiState(
     val reddits: List<Reddit> = listOf(),
+    val searchedReddits: List<Reddit> = listOf(),
     val isLoadingSubreddits: Boolean = false,
     val searchInput: String = "",
     val errorMessage: String = "",
@@ -71,11 +72,27 @@ class MainViewModel @Inject constructor(
     }
 
     val onSearchInputChanged: (String) -> Unit = { searchInput ->
+        if (searchInput.isNotEmpty() && getState().reddits.isNotEmpty()) {
+            val result = getState().reddits.filter {
+                it.title.contains(searchInput, ignoreCase = true)
+            }
+
+            viewModelState.update {
+                it.copy(
+                    searchedReddits = result
+                )
+            }
+        }
+
         viewModelState.update {
             it.copy(
                 searchInput = searchInput
             )
         }
+    }
+
+    private fun getState(): MainUiState {
+        return viewModelState.value
     }
 
     init {

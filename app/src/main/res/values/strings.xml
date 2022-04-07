@@ -9,6 +9,6 @@
     <string name="unknown_error_JsonSyntaxException_message">Invalid response.</string>
     <string name="unknown_error_else_message">An unexpected error occurred\nSorry for the inconvenience.</string>
 
-    <string name="search_hint">Search</string>
+    <string name="search_hint">Search Subreddit</string>
     <string name="subscribers">%s subscribers</string>
 </resources>
