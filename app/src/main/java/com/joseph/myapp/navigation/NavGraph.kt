@@ -48,7 +48,9 @@ fun SetupNavGraph(
             arguments = Screen.RedditScreen.component().arguments
         ) {
             val reddit = it.safeArgsDataClass<Reddit>(NavKey.PARCELIZE_REDDIT.value)
-            RedditScreen()
+            RedditScreen(
+                reddit = reddit!!
+            )
         }
     }
 }

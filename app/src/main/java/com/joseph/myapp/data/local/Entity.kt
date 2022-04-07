@@ -11,5 +11,6 @@ data class Reddit(
     @ColumnInfo(name = "unique_id") val uniqueId: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "description") val description: String,
-    @ColumnInfo(name = "subscribers") val subscribers: Long
+    @ColumnInfo(name = "subscribers") val subscribers: Long,
+    @ColumnInfo(name = "display_name") val displayName: String
 )

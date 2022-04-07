@@ -32,7 +32,7 @@ sealed class Screen(protected val route: String) : NavComponent {
                         key = NavKey.PARCELIZE_REDDIT.value,
                         dataType = CustomNavType.DataClassType,
                         isNullable = false,
-                        initialValue = Reddit(0, "", "", "", 0L)
+                        initialValue = Reddit(0, "", "", "", 0L, "")
                     )
                 )
             )
