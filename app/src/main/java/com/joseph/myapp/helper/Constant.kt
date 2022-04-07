@@ -5,10 +5,9 @@ import androidx.annotation.Keep
 const val GLOBAL_TAG = "SUMAN"
 const val REQUEST_TAG = " REQUEST"
 const val RESPONSE_TAG = " RESPONSE"
-const val TIMER_TAG = "HAKDOG -> "
 
 const val REQUEST_TIME_OUT = 60L
-const val SPLASH_SCREEN_DELAY = 1L
+const val SPLASH_SCREEN_DELAY = 3000L
 
 @Keep
 enum class HttpStatus(val code: Int, val reasonPhrase: String) {

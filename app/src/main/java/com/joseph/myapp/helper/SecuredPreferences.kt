@@ -19,7 +19,6 @@ object SecuredPreferences {
 
     private const val KEY_FIRST_INSTALL = "SecuredPreferences.FIRST_INSTALL"
     private const val KEY_BEARER_TOKEN = "SecuredPreferences.BEARER_TOKEN"
-    private const val KEY_BEARER_TOKEN_VALIDITY = "SecuredPreferences.BEARER_TOKEN_VALIDITY"
 
     var firstInstall: Boolean
         get() = sharedPref.getBoolean(KEY_FIRST_INSTALL, true)
@@ -31,11 +30,5 @@ object SecuredPreferences {
         get() = sharedPref.getString(KEY_BEARER_TOKEN, "") ?: ""
         set(value) {
             sharedPref.edit { it.putString(KEY_BEARER_TOKEN, value.trim()) }
-        }
-
-    var bearerTokenValidity: Long
-        get() = sharedPref.getLong(KEY_BEARER_TOKEN_VALIDITY, 0L)
-        set(value) {
-            sharedPref.edit { it.putLong(KEY_BEARER_TOKEN_VALIDITY, value) }
         }
 }
