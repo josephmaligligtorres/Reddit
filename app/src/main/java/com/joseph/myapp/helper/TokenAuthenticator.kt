@@ -2,7 +2,6 @@ package com.joseph.myapp.helper
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.joseph.myapp.BuildConfig
-import com.joseph.myapp.data.remote.RefreshTokenResponse
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -16,9 +15,9 @@ class TokenAuthenticator : Authenticator {
         }
 
         return runBlocking {
-            when (val tokenResponse = refreshToken()) {
+            when (val token = refreshToken()) {
                 is ResponseResult.Success -> {
-                    setBearerToken(tokenResponse.data.accessToken)
+                    setBearerToken(token.data)
                     response.request.newBuilder()
                         .header("Authorization", getBearerToken())
                         .build()
@@ -28,7 +27,7 @@ class TokenAuthenticator : Authenticator {
         }
     }
 
-    private suspend fun refreshToken(): ResponseResult<RefreshTokenResponse> {
+    private suspend fun refreshToken(): ResponseResult<String> {
         return when (
             val response = createAuthApi().refreshToken(
                 grantType = "refresh_token",
@@ -36,7 +35,7 @@ class TokenAuthenticator : Authenticator {
             )
         ) {
             is NetworkResponse.Success -> {
-                ResponseResult.Success(response.body)
+                ResponseResult.Success(response.body.accessToken)
             }
             else -> {
                 ResponseResult.Error(response.toString())
