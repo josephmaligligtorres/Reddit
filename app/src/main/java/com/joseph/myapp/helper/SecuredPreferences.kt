@@ -17,8 +17,15 @@ object SecuredPreferences {
         editor.apply()
     }
 
+    private const val KEY_FIRST_INSTALL = "SecuredPreferences.FIRST_INSTALL"
     private const val KEY_BEARER_TOKEN = "SecuredPreferences.BEARER_TOKEN"
     private const val KEY_BEARER_TOKEN_VALIDITY = "SecuredPreferences.BEARER_TOKEN_VALIDITY"
+
+    var firstInstall: Boolean
+        get() = sharedPref.getBoolean(KEY_FIRST_INSTALL, true)
+        set(value) {
+            sharedPref.edit { it.putBoolean(KEY_FIRST_INSTALL, value) }
+        }
 
     var bearerToken: String
         get() = sharedPref.getString(KEY_BEARER_TOKEN, "") ?: ""

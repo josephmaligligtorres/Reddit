@@ -1,8 +1,8 @@
 package com.joseph.myapp.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.ResponseResult
 import com.joseph.myapp.navigation.NavDirection
 import com.joseph.myapp.use_case.GetAllRedditsUseCase
@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 data class MainUiState(
+    val reddits: List<Reddit> = listOf(),
     val isLoadingSubreddits: Boolean = false,
     val errorMessage: String = "",
     val errorTrigger: Boolean = false
@@ -36,10 +37,6 @@ class MainViewModel @Inject constructor(
         SharingStarted.Eagerly,
         viewModelState.value
     )
-
-    private fun getState(): MainUiState {
-        return viewModelState.value
-    }
 
     val onSetup: (navDirection: NavDirection) -> Unit = { navDirection ->
         this.navDirection = navDirection
@@ -74,11 +71,14 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAllRedditsUseCase().collect {
-                for (i in it) {
-                    Log.e("suso", i.toString())
+            getAllRedditsUseCase().collect { reddits ->
+                viewModelState.update {
+                    it.copy(
+                        reddits = reddits
+                    )
                 }
             }
         }
+        onLoadSubreddits()
     }
 }

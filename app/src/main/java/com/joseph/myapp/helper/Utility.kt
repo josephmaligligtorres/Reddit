@@ -274,3 +274,10 @@ fun getBearerToken(): String {
 fun setBearerToken(token: String) {
     SecuredPreferences.bearerToken = token
 }
+
+fun firstInstall() {
+    if (SecuredPreferences.firstInstall) {
+        SecuredPreferences.firstInstall = false
+        setBearerToken(BuildConfig.REFRESH_TOKEN)
+    }
+}

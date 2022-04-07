@@ -147,4 +147,10 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    /**
+     * SwipeRefresh
+     */
+    def accompanist_swipe_refresh_version = '0.24.3-alpha'
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_swipe_refresh_version"
 }

@@ -21,6 +21,8 @@ class BaseApplication : MultiDexApplication() {
         SecuredPreferences.init(this)
         Stetho.initializeWithDefaults(this)
 
+        firstInstall()
+
         FireCrasher.install(
             this,
             object : CrashListener() {
