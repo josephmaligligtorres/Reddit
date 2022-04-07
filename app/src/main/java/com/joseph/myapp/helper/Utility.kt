@@ -14,6 +14,8 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.joseph.myapp.BuildConfig
 import com.joseph.myapp.R
+import com.joseph.myapp.api.AuthApi
+import com.joseph.myapp.api.DataApi
 import com.joseph.myapp.navigation.CustomNavType
 import com.joseph.myapp.navigation.NavData
 import okhttp3.OkHttpClient
@@ -46,7 +48,7 @@ fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpC
     val authorization = if (isAuthApi) {
         Credentials.basic(BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET)
     } else {
-        "bearer ${getBearerToken()}"
+        getBearerToken()
     }
 
     return builder.run {
@@ -95,21 +97,32 @@ fun createAuthenticatorHttpBuilder(): OkHttpClient.Builder {
         connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         writeTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         readTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
-        authenticator(
-            TokenAuthenticator(
-                createApi(
-                    okHttpClient = createHttpClient(
-                        isAuthApi = true,
-                        builder = createHttpBuilder()
-                    ),
-                    factory = RxJava2CallAdapterFactory.create(),
-                    baseUrl = BuildConfig.BASE_AUTH_API_URL
-                )
-            )
-        )
+        authenticator(TokenAuthenticator())
         followRedirects(false)
         followSslRedirects(false)
     }
+}
+
+fun createDataApi(): DataApi {
+    return createApi(
+        okHttpClient = createHttpClient(
+            isAuthApi = false,
+            builder = createAuthenticatorHttpBuilder()
+        ),
+        factory = RxJava2CallAdapterFactory.create(),
+        baseUrl = BuildConfig.BASE_DATA_API_URL
+    )
+}
+
+fun createAuthApi(): AuthApi {
+    return createApi(
+        okHttpClient = createHttpClient(
+            isAuthApi = true,
+            builder = createHttpBuilder()
+        ),
+        factory = RxJava2CallAdapterFactory.create(),
+        baseUrl = BuildConfig.BASE_AUTH_API_URL
+    )
 }
 
 fun decodeUnknownError(throwable: Throwable, context: WeakReference<Context>): String {
@@ -272,7 +285,7 @@ fun getBearerToken(): String {
 }
 
 fun setBearerToken(token: String) {
-    SecuredPreferences.bearerToken = token
+    SecuredPreferences.bearerToken = "bearer $token"
 }
 
 fun firstInstall() {

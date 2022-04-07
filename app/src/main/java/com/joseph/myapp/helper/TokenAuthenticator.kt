@@ -2,7 +2,6 @@ package com.joseph.myapp.helper
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.joseph.myapp.BuildConfig
-import com.joseph.myapp.api.AuthApi
 import com.joseph.myapp.data.remote.RefreshTokenResponse
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -10,21 +9,18 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
-class TokenAuthenticator(
-    private val authApi: AuthApi
-) : Authenticator {
+class TokenAuthenticator : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-
         if (response.code != 401) {
             return null
         }
 
         return runBlocking {
-            when (val result = refreshToken()) {
+            when (val tokenResponse = refreshToken()) {
                 is ResponseResult.Success -> {
-                    setBearerToken(result.data.accessToken)
+                    setBearerToken(tokenResponse.data.accessToken)
                     response.request.newBuilder()
-                        .header("Authorization", "bearer ${getBearerToken()}")
+                        .header("Authorization", getBearerToken())
                         .build()
                 }
                 else -> null
@@ -34,7 +30,7 @@ class TokenAuthenticator(
 
     private suspend fun refreshToken(): ResponseResult<RefreshTokenResponse> {
         return when (
-            val response = authApi.refreshToken(
+            val response = createAuthApi().refreshToken(
                 grantType = "refresh_token",
                 refreshToken = BuildConfig.REFRESH_TOKEN
             )
@@ -42,15 +38,8 @@ class TokenAuthenticator(
             is NetworkResponse.Success -> {
                 ResponseResult.Success(response.body)
             }
-            is NetworkResponse.ServerError -> {
-                val message = getHttpStatus(response.code)?.reasonPhrase.toString()
-                ResponseResult.Error(message)
-            }
-            is NetworkResponse.NetworkError -> {
-                ResponseResult.Error(response.error.toString())
-            }
-            is NetworkResponse.UnknownError -> {
-                ResponseResult.Error(response.error.toString())
+            else -> {
+                ResponseResult.Error(response.toString())
             }
         }
     }

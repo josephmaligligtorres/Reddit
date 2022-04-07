@@ -2,11 +2,11 @@ package com.joseph.myapp.repository
 
 import android.content.Context
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.api.DataApi
 import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.data.local.RedditDao
 import com.joseph.myapp.helper.ResponseResult
+import com.joseph.myapp.helper.createDataApi
 import com.joseph.myapp.helper.decodeNetworkError
 import com.joseph.myapp.helper.decodeUnknownError
 import com.joseph.myapp.helper.getHttpStatus
@@ -14,12 +14,11 @@ import java.lang.ref.WeakReference
 import kotlinx.coroutines.flow.Flow
 
 class RedditRemoteDataSource(
-    private val dataApi: DataApi,
     private val redditDao: RedditDao,
     private val context: WeakReference<Context>
 ) : RedditDataSource {
     override suspend fun getSubreddits(): ResponseResult<SubredditsResponse> {
-        return when (val response = dataApi.getSubreddits()) {
+        return when (val response = createDataApi().getSubreddits()) {
             is NetworkResponse.Success -> {
                 val reddits = response.body.toReddits()
                 for (item in reddits) {
