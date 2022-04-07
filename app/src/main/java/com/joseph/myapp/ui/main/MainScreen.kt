@@ -82,11 +82,20 @@ fun MainContent(
                 .fillMaxSize()
                 .background(Color(0xFFFFFFFF))
         ) {
-            val lottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.progress_bar))
-            val lottieProgress by animateLottieCompositionAsState(
-                composition = lottieComposition,
+            val loadingLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_anim))
+            val loadingLottieProgress by animateLottieCompositionAsState(
+                composition = loadingLottieComposition,
                 iterations = LottieConstants.IterateForever,
                 isPlaying = uiState.isLoadingSubreddits,
+                speed = 1f,
+                restartOnPlay = false
+            )
+
+            val notFoundLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.not_found_anim))
+            val notFoundLottieProgress by animateLottieCompositionAsState(
+                composition = notFoundLottieComposition,
+                iterations = LottieConstants.IterateForever,
+                isPlaying = uiState.searchInput.isNotEmpty(),
                 speed = 1f,
                 restartOnPlay = false
             )
@@ -111,8 +120,8 @@ fun MainContent(
                                 LottieAnimation(
                                     modifier = Modifier
                                         .size(200.dp),
-                                    composition = lottieComposition,
-                                    progress = lottieProgress
+                                    composition = loadingLottieComposition,
+                                    progress = loadingLottieProgress
                                 )
                             }
                         }
@@ -123,10 +132,28 @@ fun MainContent(
                             uiState.reddits
                         }
 
-                        items(result.size) { index ->
-                            RedditItem(
-                                reddit = result[index]
-                            )
+                        if (result.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillParentMaxHeight()
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    LottieAnimation(
+                                        modifier = Modifier
+                                            .size(200.dp),
+                                        composition = notFoundLottieComposition,
+                                        progress = notFoundLottieProgress
+                                    )
+                                }
+                            }
+                        } else {
+                            items(result.size) { index ->
+                                RedditItem(
+                                    reddit = result[index]
+                                )
+                            }
                         }
                     }
                 }
