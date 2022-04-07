@@ -1,6 +1,7 @@
 package com.joseph.myapp.ui.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
@@ -53,6 +54,9 @@ fun MainContent(
     ) {
         Box(
             modifier = Modifier
+                .clickable {
+                    onLoadSubreddits()
+                }
                 .background(Color(0xFFEFF7FF))
                 .fillMaxSize()
         )

@@ -2,10 +2,7 @@ package com.joseph.myapp.repository
 
 import android.content.Context
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.BuildConfig
-import com.joseph.myapp.api.AuthApi
 import com.joseph.myapp.api.DataApi
-import com.joseph.myapp.data.remote.RefreshTokenResponse
 import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.data.local.RedditDao
@@ -17,7 +14,6 @@ import java.lang.ref.WeakReference
 import kotlinx.coroutines.flow.Flow
 
 class RedditRemoteDataSource(
-    private val authApi: AuthApi,
     private val dataApi: DataApi,
     private val redditDao: RedditDao,
     private val context: WeakReference<Context>
@@ -30,31 +26,6 @@ class RedditRemoteDataSource(
                     redditDao.deleteReddit(item.uniqueId)
                     redditDao.insertReddit(item)
                 }
-                ResponseResult.Success(response.body)
-            }
-            is NetworkResponse.ServerError -> {
-                val message = getHttpStatus(response.code)?.reasonPhrase.toString()
-                ResponseResult.Error(message)
-            }
-            is NetworkResponse.NetworkError -> {
-                val message = decodeNetworkError(response.error, context)
-                ResponseResult.Error(message)
-            }
-            is NetworkResponse.UnknownError -> {
-                val message = decodeUnknownError(response.error, context)
-                ResponseResult.Error(message)
-            }
-        }
-    }
-
-    override suspend fun refreshToken(): ResponseResult<RefreshTokenResponse> {
-        return when (
-            val response = authApi.refreshToken(
-                grantType = "refresh_token",
-                refreshToken = BuildConfig.REFRESH_TOKEN
-            )
-        ) {
-            is NetworkResponse.Success -> {
                 ResponseResult.Success(response.body)
             }
             is NetworkResponse.ServerError -> {

@@ -1,7 +1,6 @@
 package com.joseph.myapp.helper
 
 import android.content.Context
-import android.os.SystemClock
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -30,6 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLPeerUnverifiedException
 import okhttp3.Credentials
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 inline fun <reified T> createApi(okHttpClient: OkHttpClient, factory: CallAdapter.Factory, baseUrl: String): T {
     return Retrofit.Builder().run {
@@ -85,6 +85,28 @@ fun createHttpBuilder(): OkHttpClient.Builder {
         connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         writeTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         readTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
+        followRedirects(false)
+        followSslRedirects(false)
+    }
+}
+
+fun createAuthenticatorHttpBuilder(): OkHttpClient.Builder {
+    return OkHttpClient.Builder().apply {
+        connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
+        writeTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
+        readTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
+        authenticator(
+            TokenAuthenticator(
+                createApi(
+                    okHttpClient = createHttpClient(
+                        isAuthApi = true,
+                        builder = createHttpBuilder()
+                    ),
+                    factory = RxJava2CallAdapterFactory.create(),
+                    baseUrl = BuildConfig.BASE_AUTH_API_URL
+                )
+            )
+        )
         followRedirects(false)
         followSslRedirects(false)
     }
@@ -243,15 +265,6 @@ inline fun <reified T> dataClassDecoder(jsonString: String): T? {
 
 fun dataClassEncoder(dataClass: Any?): String {
     return Gson().toJson(dataClass)
-}
-
-fun getBearerTokenValidity(): Long {
-    val triggerTime = SystemClock.elapsedRealtime() + TimeUnit.MINUTES.toMillis(5L)
-    return SecuredPreferences.bearerTokenValidity - triggerTime
-}
-
-fun setBearerTokenValidity(validity: Long) {
-    SecuredPreferences.bearerTokenValidity = validity
 }
 
 fun getBearerToken(): String {

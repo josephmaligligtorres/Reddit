@@ -2,7 +2,6 @@ package com.joseph.myapp.helper
 
 import android.content.Context
 import com.joseph.myapp.BuildConfig
-import com.joseph.myapp.api.AuthApi
 import com.joseph.myapp.api.DataApi
 import com.joseph.myapp.data.local.AppDatabase
 import com.joseph.myapp.data.local.RedditDao
@@ -30,25 +29,12 @@ object HiltModule {
         return WeakReference(context)
     }
 
-    @Singleton
-    @Provides
-    fun providesAuthApi(): AuthApi {
-        return createApi(
-            okHttpClient = createHttpClient(
-                isAuthApi = true,
-                builder = createHttpBuilder()
-            ),
-            factory = RxJava2CallAdapterFactory.create(),
-            baseUrl = BuildConfig.BASE_AUTH_API_URL
-        )
-    }
-
     @Provides
     fun providesDataApi(): DataApi {
         return createApi(
             okHttpClient = createHttpClient(
                 isAuthApi = false,
-                builder = createHttpBuilder()
+                builder = createAuthenticatorHttpBuilder()
             ),
             factory = RxJava2CallAdapterFactory.create(),
             baseUrl = BuildConfig.BASE_DATA_API_URL
@@ -57,14 +43,12 @@ object HiltModule {
 
     @Provides
     fun providesRedditRepository(
-        authApi: AuthApi,
         dataApi: DataApi,
         redditDao: RedditDao,
         context: WeakReference<Context>
     ): RedditRepository {
         return RedditRepositoryImpl(
             remoteDataSource = RedditRemoteDataSource(
-                authApi = authApi,
                 dataApi = dataApi,
                 redditDao = redditDao,
                 context = context

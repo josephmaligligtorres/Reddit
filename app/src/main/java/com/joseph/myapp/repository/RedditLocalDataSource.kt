@@ -1,6 +1,5 @@
 package com.joseph.myapp.repository
 
-import com.joseph.myapp.data.remote.RefreshTokenResponse
 import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.data.local.RedditDao
@@ -11,10 +10,6 @@ class RedditLocalDataSource(
     private val redditDao: RedditDao
 ) : RedditDataSource {
     override suspend fun getSubreddits(): ResponseResult<SubredditsResponse> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun refreshToken(): ResponseResult<RefreshTokenResponse> {
         TODO("Not yet implemented")
     }
 
