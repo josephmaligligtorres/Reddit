@@ -10,5 +10,6 @@ data class Reddit(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "unique_id") val uniqueId: String,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "description") var description: String
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "subscribers") val subscribers: Long
 )

@@ -15,7 +15,8 @@ data class SubredditsResponse(
                     id = 0,
                     uniqueId = it.data.name,
                     title = it.data.title,
-                    description = it.data.publicDescription
+                    description = it.data.publicDescription,
+                    subscribers = it.data.subscribers
                 )
             )
         }
