@@ -1,4 +1,4 @@
-package com.joseph.myapp.use_case
+package com.joseph.myapp.domain
 
 import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.helper.ResponseResult

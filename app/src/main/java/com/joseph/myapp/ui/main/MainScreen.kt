@@ -58,7 +58,8 @@ fun MainScreen(
         MainContent(
             uiState = uiState,
             onLoadSubreddits = onLoadSubreddits,
-            onSearchInputChanged = onSearchInputChanged
+            onSearchInputChanged = onSearchInputChanged,
+            onNavigateMainToReddit = onNavigateMainToReddit
         )
     }
 }
@@ -67,7 +68,8 @@ fun MainScreen(
 fun MainContent(
     uiState: MainUiState,
     onLoadSubreddits: () -> Unit,
-    onSearchInputChanged: (String) -> Unit
+    onSearchInputChanged: (String) -> Unit,
+    onNavigateMainToReddit: (Reddit) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -151,7 +153,8 @@ fun MainContent(
                         } else {
                             items(result.size) { index ->
                                 RedditItem(
-                                    reddit = result[index]
+                                    reddit = result[index],
+                                    onNavigateMainToReddit = onNavigateMainToReddit
                                 )
                             }
                         }
@@ -164,13 +167,16 @@ fun MainContent(
 
 @Composable
 fun RedditItem(
-    reddit: Reddit
+    reddit: Reddit,
+    onNavigateMainToReddit: (Reddit) -> Unit
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = 18.dp)
             .fillMaxWidth()
-            .clickable { }
+            .clickable {
+                onNavigateMainToReddit(reddit)
+            }
     ) {
         Spacer(
             modifier = Modifier
@@ -242,7 +248,8 @@ private fun Preview() {
         MainContent(
             uiState = MainUiState(),
             onLoadSubreddits = {},
-            onSearchInputChanged = {}
+            onSearchInputChanged = {},
+            onNavigateMainToReddit = {}
         )
     }
 }

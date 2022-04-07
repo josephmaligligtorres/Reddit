@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.ResponseResult
 import com.joseph.myapp.navigation.NavDirection
-import com.joseph.myapp.use_case.GetAllRedditsUseCase
-import com.joseph.myapp.use_case.GetSubredditsUseCase
+import com.joseph.myapp.domain.GetAllRedditsUseCase
+import com.joseph.myapp.domain.GetSubredditsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
         viewModelState.value
     )
 
-    val onSetup: (navDirection: NavDirection) -> Unit = { navDirection ->
+    val onSetup: (NavDirection) -> Unit = { navDirection ->
         this.navDirection = navDirection
     }
 
@@ -89,6 +89,10 @@ class MainViewModel @Inject constructor(
                 searchInput = searchInput
             )
         }
+    }
+
+    val onNavigateMainToReddit: (Reddit) -> Unit = { reddit ->
+        navDirection.mainToReddit(reddit)
     }
 
     private fun getState(): MainUiState {

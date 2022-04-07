@@ -80,5 +80,5 @@ enum class HttpStatus(val code: Int, val reasonPhrase: String) {
 
 @Keep
 enum class NavKey(val value: String) {
-    ID("NavKey.ID")
+    PARCELIZE_REDDIT("NavKey.PARCELIZE_REDDIT")
 }

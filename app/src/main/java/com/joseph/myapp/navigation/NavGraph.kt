@@ -6,8 +6,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.joseph.myapp.data.local.Reddit
+import com.joseph.myapp.helper.NavKey
+import com.joseph.myapp.helper.safeArgsDataClass
 import com.joseph.myapp.ui.main.MainScreen
 import com.joseph.myapp.ui.main.MainViewModel
+import com.joseph.myapp.ui.reddit.RedditScreen
 import com.joseph.myapp.ui.splash.SplashScreen
 
 @Composable
@@ -37,6 +41,14 @@ fun SetupNavGraph(
                 scaffoldState = scaffoldState,
                 viewModel = viewModel
             )
+        }
+
+        composable(
+            route = Screen.RedditScreen.component().route,
+            arguments = Screen.RedditScreen.component().arguments
+        ) {
+            val reddit = it.safeArgsDataClass<Reddit>(NavKey.PARCELIZE_REDDIT.value)
+            RedditScreen()
         }
     }
 }
