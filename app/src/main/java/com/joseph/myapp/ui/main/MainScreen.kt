@@ -172,65 +172,68 @@ fun RedditItem(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 18.dp)
-            .fillMaxWidth()
             .clickable {
                 onNavigateMainToReddit(reddit)
             }
     ) {
-        Spacer(
+        Column(
             modifier = Modifier
-                .height(15.dp)
-        )
-
-        Text(
-            text = reddit.title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 19.sp,
-            color = Color(0xFF336699)
-        )
-
-        Spacer(
-            modifier = Modifier
-                .height(5.dp)
-        )
-
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(6.dp),
-            color = Color(0xFFEFF7FF),
-            elevation = 3.dp
+                .padding(horizontal = 18.dp)
         ) {
-            Text(
+            Spacer(
                 modifier = Modifier
-                    .padding(all = 10.dp),
-                text = reddit.description,
-                fontWeight = FontWeight.Normal,
-                fontSize = 15.sp,
+                    .height(15.dp)
+            )
+
+            Text(
+                text = reddit.title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 19.sp,
                 color = Color(0xFF336699)
             )
+
+            Spacer(
+                modifier = Modifier
+                    .height(5.dp)
+            )
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(6.dp),
+                color = Color(0xFFEFF7FF),
+                elevation = 3.dp
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(all = 10.dp),
+                    text = reddit.description,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 15.sp,
+                    color = Color(0xFF336699)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier
+                    .height(5.dp)
+            )
+
+            Text(
+                text = stringResource(
+                    id = R.string.subscribers,
+                    String.format("%,d", reddit.subscribers)
+                ),
+                fontWeight = FontWeight.Normal,
+                fontSize = 13.sp,
+                color = Color(0xFF000000)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .height(15.dp)
+            )
         }
-
-        Spacer(
-            modifier = Modifier
-                .height(5.dp)
-        )
-
-        Text(
-            text = stringResource(
-                id = R.string.subscribers,
-                String.format("%,d", reddit.subscribers)
-            ),
-            fontWeight = FontWeight.Normal,
-            fontSize = 13.sp,
-            color = Color(0xFF000000)
-        )
-
-        Spacer(
-            modifier = Modifier
-                .height(15.dp)
-        )
     }
 
     Spacer(
