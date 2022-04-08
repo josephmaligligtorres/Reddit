@@ -9,10 +9,14 @@ import okhttp3.Response
 import okhttp3.Route
 
 class TokenAuthenticator : Authenticator {
+    var retryCounter = 0
+
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code != 401) {
+        if (response.code != 401 || retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
             return null
         }
+
+        retryCounter++
 
         return runBlocking {
             when (val token = refreshToken()) {

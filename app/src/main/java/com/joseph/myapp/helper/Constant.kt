@@ -7,6 +7,7 @@ const val REQUEST_TAG = " REQUEST"
 const val RESPONSE_TAG = " RESPONSE"
 
 const val REQUEST_TIME_OUT = 60L
+const val TOKEN_AUTHENTICATOR_LIMIT = 5
 const val SPLASH_SCREEN_DELAY = 3000L
 
 @Keep
