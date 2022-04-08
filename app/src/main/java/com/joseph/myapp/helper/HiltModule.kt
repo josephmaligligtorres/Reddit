@@ -45,13 +45,17 @@ object HiltModule {
 
     @Singleton
     @Provides
-    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun providesAppDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
         return AppDatabase.getDatabase(context)
     }
 
     @Singleton
     @Provides
-    fun providesRedditDao(appDatabase: AppDatabase): RedditDao {
+    fun providesRedditDao(
+        appDatabase: AppDatabase
+    ): RedditDao {
         return appDatabase.getRedditDao()
     }
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun InitEffect(block: suspend CoroutineScope.() -> Unit) {
     var triggerValue by rememberSaveable { mutableStateOf(false) }
+
     LaunchedEffect(key1 = Unit) {
         if (!triggerValue) {
             triggerValue = true
@@ -23,6 +24,7 @@ fun InitEffect(block: suspend CoroutineScope.() -> Unit) {
 fun TriggeredEffect(uiState: Any?, trigger: Boolean, block: suspend CoroutineScope.() -> Unit) {
     var triggerValue: Boolean? by rememberSaveable { mutableStateOf(null) }
     val oldValue = triggerValue
+
     LaunchedEffect(key1 = uiState) {
         if (uiState.isNotNull()) {
             if (trigger != triggerValue) {

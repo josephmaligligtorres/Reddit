@@ -16,20 +16,13 @@ class BaseApplication : MultiDexApplication() {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(CustomDebugTree())
-        }
-
-        SecuredPreferences.init(this)
-        Stetho.initializeWithDefaults(this)
-
-        firstInstall()
-
-        FireCrasher.install(
-            this,
-            object : CrashListener() {
-                override fun onCrash(throwable: Throwable) {
-                    evaluate { activity, _ ->
-                        activity?.let {
-                            if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+            FireCrasher.install(
+                this,
+                object : CrashListener() {
+                    override fun onCrash(throwable: Throwable) {
+                        evaluate { activity, _ ->
+                            activity?.let {
                                 Toast.makeText(it, throwable.stackTraceToString(), Toast.LENGTH_LONG).show()
 
                                 val errorBuilder = StringBuilder()
@@ -41,7 +34,10 @@ class BaseApplication : MultiDexApplication() {
                         }
                     }
                 }
-            }
-        )
+            )
+        }
+
+        SessionManager.init(this)
+        firstInstall()
     }
 }

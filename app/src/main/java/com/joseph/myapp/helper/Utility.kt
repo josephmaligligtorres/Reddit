@@ -52,15 +52,6 @@ fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpC
     }
 
     return builder.run {
-        addInterceptor(
-            LoggingInterceptor.Builder().run {
-                request(GLOBAL_TAG + REQUEST_TAG)
-                response(GLOBAL_TAG + RESPONSE_TAG)
-                log(Platform.INFO)
-                setLevel(Level.BASIC)
-                build()
-            }
-        )
         addInterceptor { chain ->
             val oldRequest = chain.request()
             val newRequest = oldRequest.newBuilder().run {
@@ -76,6 +67,15 @@ fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpC
 
         if (BuildConfig.DEBUG) {
             addNetworkInterceptor(StethoInterceptor())
+            addInterceptor(
+                LoggingInterceptor.Builder().run {
+                    request(GLOBAL_TAG + REQUEST_TAG)
+                    response(GLOBAL_TAG + RESPONSE_TAG)
+                    log(Platform.INFO)
+                    setLevel(Level.BASIC)
+                    build()
+                }
+            )
         }
 
         build()
@@ -281,16 +281,16 @@ fun dataClassEncoder(dataClass: Any?): String {
 }
 
 fun getBearerToken(): String {
-    return SecuredPreferences.bearerToken
+    return SessionManager.bearerToken
 }
 
 fun setBearerToken(token: String) {
-    SecuredPreferences.bearerToken = "bearer $token"
+    SessionManager.bearerToken = "bearer $token"
 }
 
 fun firstInstall() {
-    if (SecuredPreferences.firstInstall) {
-        SecuredPreferences.firstInstall = false
+    if (SessionManager.firstInstall) {
+        SessionManager.firstInstall = false
         setBearerToken(BuildConfig.REFRESH_TOKEN)
     }
 }
