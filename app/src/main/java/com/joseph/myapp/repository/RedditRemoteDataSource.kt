@@ -2,7 +2,6 @@ package com.joseph.myapp.repository
 
 import android.content.Context
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.data.remote.SubredditsResponse
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.data.local.RedditDao
 import com.joseph.myapp.helper.ResponseResult
@@ -17,7 +16,7 @@ class RedditRemoteDataSource(
     private val redditDao: RedditDao,
     private val context: WeakReference<Context>
 ) : RedditDataSource {
-    override suspend fun getSubreddits(): ResponseResult<SubredditsResponse> {
+    override suspend fun getSubreddits(): ResponseResult<Unit> {
         return when (val response = createDataApi().getSubreddits()) {
             is NetworkResponse.Success -> {
                 val reddits = response.body.toReddits()
@@ -25,7 +24,7 @@ class RedditRemoteDataSource(
                     redditDao.deleteReddit(item.uniqueId)
                     redditDao.insertReddit(item)
                 }
-                ResponseResult.Success(response.body)
+                ResponseResult.Success(Unit)
             }
             is NetworkResponse.ServerError -> {
                 val message = getHttpStatus(response.code)?.reasonPhrase.toString()

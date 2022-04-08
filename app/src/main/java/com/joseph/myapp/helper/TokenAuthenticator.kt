@@ -22,7 +22,9 @@ class TokenAuthenticator : Authenticator {
                         .header("Authorization", getBearerToken())
                         .build()
                 }
-                else -> null
+                else -> {
+                    null
+                }
             }
         }
     }
@@ -38,7 +40,7 @@ class TokenAuthenticator : Authenticator {
                 ResponseResult.Success(response.body.accessToken)
             }
             else -> {
-                ResponseResult.Error(response.toString())
+                ResponseResult.Error("")
             }
         }
     }
