@@ -13,4 +13,14 @@ data class Reddit(
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "subscribers") val subscribers: Long,
     @ColumnInfo(name = "display_name") val displayName: String
-)
+) {
+    constructor() :
+            this(
+                0,
+                "",
+                "",
+                "",
+                0L,
+                ""
+            )
+}

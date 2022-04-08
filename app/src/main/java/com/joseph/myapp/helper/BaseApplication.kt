@@ -1,6 +1,5 @@
 package com.joseph.myapp.helper
 
-import android.util.Log
 import android.widget.Toast
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
@@ -37,7 +36,7 @@ class BaseApplication : MultiDexApplication() {
                                 errorBuilder.append(" \n_____________________________START OF CRASH_____________________________\n\n")
                                 errorBuilder.append(throwable.stackTraceToString())
                                 errorBuilder.append("\n______________________________END OF CRASH______________________________\n\n")
-                                Log.e(GLOBAL_TAG, errorBuilder.toString())
+                                Timber.tag(GLOBAL_TAG).e(errorBuilder.toString())
                             }
                         }
                     }
