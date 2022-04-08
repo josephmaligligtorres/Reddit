@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
@@ -33,6 +35,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.joseph.myapp.R
 import com.joseph.myapp.data.local.Reddit
@@ -104,7 +107,17 @@ fun MainContent(
 
             SwipeRefresh(
                 state = rememberSwipeRefreshState(isRefreshing = uiState.isLoadingSubreddits),
-                onRefresh = { onLoadSubreddits() }
+                onRefresh = { onLoadSubreddits() },
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        scale = true,
+                        shape = CircleShape,
+                        backgroundColor = MaterialTheme.colors.primary,
+                        contentColor = Color(0xFFFFFFFF)
+                    )
+                }
             ) {
                 LazyColumn(
                     modifier = Modifier
