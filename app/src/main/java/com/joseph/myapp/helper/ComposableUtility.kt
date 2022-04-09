@@ -10,11 +10,11 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun InitEffect(block: suspend CoroutineScope.() -> Unit) {
-    var triggerValue by rememberSaveable { mutableStateOf(false) }
+    var state by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(key1 = Unit) {
-        if (!triggerValue) {
-            triggerValue = true
+        if (!state) {
+            state = true
             block()
         }
     }
@@ -22,14 +22,14 @@ fun InitEffect(block: suspend CoroutineScope.() -> Unit) {
 
 @Composable
 fun TriggeredEffect(uiState: Any?, trigger: Boolean, block: suspend CoroutineScope.() -> Unit) {
-    var triggerValue: Boolean? by rememberSaveable { mutableStateOf(null) }
-    val oldValue = triggerValue
+    var state: Boolean? by rememberSaveable { mutableStateOf(null) }
+    val oldState = state
 
     LaunchedEffect(key1 = uiState) {
         if (uiState.isNotNull()) {
-            if (trigger != triggerValue) {
-                triggerValue = trigger
-                oldValue?.let {
+            if (trigger != state) {
+                state = trigger
+                oldState?.let {
                     block()
                 }
             }
