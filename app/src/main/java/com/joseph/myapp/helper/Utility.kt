@@ -14,8 +14,8 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.joseph.myapp.BuildConfig
 import com.joseph.myapp.R
-import com.joseph.myapp.api.AuthApi
-import com.joseph.myapp.api.DataApi
+import com.joseph.myapp.api.endpoint.AuthApi
+import com.joseph.myapp.api.endpoint.DataApi
 import com.joseph.myapp.navigation.CustomNavType
 import com.joseph.myapp.navigation.NavData
 import okhttp3.OkHttpClient
@@ -178,7 +178,7 @@ fun generateNavData(route: String, vararg safeArgs: Any?, arguments: List<NamedN
         safeArgs = buildString {
             append(route)
             arguments.forEachIndexed { index, argument ->
-                val data = if (index >= safeArgs.size) null else safeArgs[index]
+                val data = safeArgs.getOrNull(index)
                 val dataType = argument.argument.type
                 val isNullable = argument.argument.isNullable
                 val initialValue = argument.argument.defaultValue

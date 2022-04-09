@@ -1,7 +1,7 @@
 package com.joseph.myapp.helper
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.BuildConfig
+import com.joseph.myapp.api.request.RefreshTokenRequest
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -12,7 +12,7 @@ class TokenAuthenticator : Authenticator {
     var retryCounter = 0
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code != 401 || retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
+        if (getHttpStatus(response.code) != HttpStatus.UNAUTHORIZED || retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
             return null
         }
 
@@ -35,10 +35,12 @@ class TokenAuthenticator : Authenticator {
 
     private suspend fun refreshToken(): ResponseResult<String> {
         return when (
-            val response = createAuthApi().refreshToken(
-                grantType = "refresh_token",
-                refreshToken = BuildConfig.REFRESH_TOKEN
-            )
+            val response = with(RefreshTokenRequest()) {
+                createAuthApi().refreshToken(
+                    grantType = grantType,
+                    refreshToken = refreshToken
+                )
+            }
         ) {
             is NetworkResponse.Success -> {
                 ResponseResult.Success(response.body.accessToken)

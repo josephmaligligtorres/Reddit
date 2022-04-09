@@ -1,7 +1,5 @@
 package com.joseph.myapp.helper
 
-import androidx.annotation.Keep
-
 const val GLOBAL_TAG = "SUMAN"
 const val REQUEST_TAG = " REQUEST"
 const val RESPONSE_TAG = " RESPONSE"
@@ -10,7 +8,6 @@ const val REQUEST_TIME_OUT = 60L
 const val TOKEN_AUTHENTICATOR_LIMIT = 5
 const val SPLASH_SCREEN_DELAY = 3000L
 
-@Keep
 enum class HttpStatus(val code: Int, val reasonPhrase: String) {
     CONTINUE(100, "Continue"),
     SWITCHING_PROTOCOLS(101, "Switching Protocols"),
@@ -78,7 +75,6 @@ enum class HttpStatus(val code: Int, val reasonPhrase: String) {
     NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required")
 }
 
-@Keep
 enum class NavKey(val value: String) {
     PARCELIZE_REDDIT("NavKey.PARCELIZE_REDDIT")
 }

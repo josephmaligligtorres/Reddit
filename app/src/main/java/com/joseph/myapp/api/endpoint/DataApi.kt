@@ -1,4 +1,4 @@
-package com.joseph.myapp.api
+package com.joseph.myapp.api.endpoint
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.joseph.myapp.data.remote.SubredditsResponse
