@@ -53,19 +53,21 @@ fun MainScreen(
     with(viewModel) {
         val uiState by uiState.collectAsState()
 
-        TriggeredEffect(
-            input = uiState.error,
-            trigger = uiState.errorTrigger
-        ) {
-            scaffoldState.snackbarHostState.showSnackbar(uiState.error)
-        }
+        with(uiState) {
+            TriggeredEffect(
+                input = error,
+                trigger = errorTrigger
+            ) {
+                scaffoldState.snackbarHostState.showSnackbar(error)
+            }
 
-        MainContent(
-            uiState = uiState,
-            onLoadSubreddits = onLoadSubreddits,
-            onSearchInputChanged = onSearchInputChanged,
-            onNavigateMainToReddit = navDestination.mainToReddit
-        )
+            MainContent(
+                uiState = uiState,
+                onLoadSubreddits = onLoadSubreddits,
+                onSearchInputChanged = onSearchInputChanged,
+                onNavigateMainToReddit = navDestination.mainToReddit
+            )
+        }
     }
 }
 
@@ -76,80 +78,58 @@ fun MainContent(
     onSearchInputChanged: (String) -> Unit,
     onNavigateMainToReddit: (Reddit) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopBar(
-                searchInput = uiState.searchInput,
-                onSearchInputChanged = onSearchInputChanged
-            )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFFFFFFF))
+    with(uiState) {
+        Scaffold(
+            topBar = {
+                TopBar(
+                    searchInput = searchInput,
+                    onSearchInputChanged = onSearchInputChanged
+                )
+            }
         ) {
-            val loadingLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_anim))
-            val loadingLottieProgress by animateLottieCompositionAsState(
-                composition = loadingLottieComposition,
-                iterations = LottieConstants.IterateForever,
-                isPlaying = uiState.isLoadingSubreddits,
-                speed = 1f,
-                restartOnPlay = false
-            )
-
-            val notFoundLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.not_found_anim))
-            val notFoundLottieProgress by animateLottieCompositionAsState(
-                composition = notFoundLottieComposition,
-                iterations = LottieConstants.IterateForever,
-                isPlaying = uiState.searchInput.isNotEmpty(),
-                speed = 1f,
-                restartOnPlay = false
-            )
-
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = uiState.isLoadingSubreddits),
-                onRefresh = { onLoadSubreddits() },
-                indicator = { state, trigger ->
-                    SwipeRefreshIndicator(
-                        state = state,
-                        refreshTriggerDistance = trigger,
-                        scale = true,
-                        shape = CircleShape,
-                        backgroundColor = MaterialTheme.colors.primary,
-                        contentColor = Color(0xFFFFFFFF)
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFFFFFFF))
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .weight(1f)
-                ) {
-                    if (uiState.reddits.isEmpty()) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillParentMaxHeight()
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                LottieAnimation(
-                                    modifier = Modifier
-                                        .size(200.dp),
-                                    composition = loadingLottieComposition,
-                                    progress = loadingLottieProgress
-                                )
-                            }
-                        }
-                    } else {
-                        val result = if (uiState.searchInput.isNotEmpty()) {
-                            uiState.searchedReddits
-                        } else {
-                            uiState.reddits
-                        }
+                val loadingLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_anim))
+                val loadingLottieProgress by animateLottieCompositionAsState(
+                    composition = loadingLottieComposition,
+                    iterations = LottieConstants.IterateForever,
+                    isPlaying = isLoadingSubreddits,
+                    speed = 1f,
+                    restartOnPlay = false
+                )
 
-                        if (result.isEmpty()) {
+                val notFoundLottieComposition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.not_found_anim))
+                val notFoundLottieProgress by animateLottieCompositionAsState(
+                    composition = notFoundLottieComposition,
+                    iterations = LottieConstants.IterateForever,
+                    isPlaying = searchInput.isNotEmpty(),
+                    speed = 1f,
+                    restartOnPlay = false
+                )
+
+                SwipeRefresh(
+                    state = rememberSwipeRefreshState(isRefreshing = isLoadingSubreddits),
+                    onRefresh = { onLoadSubreddits() },
+                    indicator = { state, trigger ->
+                        SwipeRefreshIndicator(
+                            state = state,
+                            refreshTriggerDistance = trigger,
+                            scale = true,
+                            shape = CircleShape,
+                            backgroundColor = MaterialTheme.colors.primary,
+                            contentColor = Color(0xFFFFFFFF)
+                        )
+                    }
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .weight(1f)
+                    ) {
+                        if (reddits.isEmpty()) {
                             item {
                                 Box(
                                     modifier = Modifier
@@ -160,17 +140,41 @@ fun MainContent(
                                     LottieAnimation(
                                         modifier = Modifier
                                             .size(200.dp),
-                                        composition = notFoundLottieComposition,
-                                        progress = notFoundLottieProgress
+                                        composition = loadingLottieComposition,
+                                        progress = loadingLottieProgress
                                     )
                                 }
                             }
                         } else {
-                            items(result.size) { index ->
-                                RedditItem(
-                                    reddit = result[index],
-                                    onNavigateMainToReddit = onNavigateMainToReddit
-                                )
+                            val result = if (searchInput.isNotEmpty()) {
+                                searchedReddits
+                            } else {
+                                reddits
+                            }
+
+                            if (result.isEmpty()) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillParentMaxHeight()
+                                            .fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        LottieAnimation(
+                                            modifier = Modifier
+                                                .size(200.dp),
+                                            composition = notFoundLottieComposition,
+                                            progress = notFoundLottieProgress
+                                        )
+                                    }
+                                }
+                            } else {
+                                items(result.size) { index ->
+                                    RedditItem(
+                                        reddit = result[index],
+                                        onNavigateMainToReddit = onNavigateMainToReddit
+                                    )
+                                }
                             }
                         }
                     }

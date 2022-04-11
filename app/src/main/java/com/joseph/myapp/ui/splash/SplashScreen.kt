@@ -36,7 +36,7 @@ fun SplashScreen(
 fun SplashContent() {
     Box(
         modifier = Modifier
-            .background(Color(0xFFCEE3F8))
+            .background(Color(0xFFFFFFFF))
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {

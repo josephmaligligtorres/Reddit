@@ -39,10 +39,10 @@ class MainViewModel @Inject constructor(
         viewModelState.value
     )
 
-    val onTriggerError: (String) -> Unit = { message ->
+    val onTriggerError: (String) -> Unit = { error ->
         viewModelState.update {
             it.copy(
-                error = message,
+                error = error,
                 errorTrigger = !it.errorTrigger
             )
         }
@@ -58,7 +58,7 @@ class MainViewModel @Inject constructor(
 
             when (val result = withContext(Dispatchers.IO) { getSubredditsUseCase() }) {
                 is ResponseResult.Error -> {
-                    onTriggerError(result.message)
+                    onTriggerError(result.error)
                 }
             }
 

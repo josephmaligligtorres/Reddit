@@ -9,7 +9,7 @@ import okhttp3.Response
 import okhttp3.Route
 
 class TokenAuthenticator : Authenticator {
-    var retryCounter = 0
+    private var retryCounter = 0
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (getHttpStatus(response.code) != HttpStatus.UNAUTHORIZED || retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
