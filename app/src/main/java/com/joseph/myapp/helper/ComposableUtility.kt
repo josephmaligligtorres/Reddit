@@ -21,20 +21,15 @@ fun InitEffect(block: suspend CoroutineScope.() -> Unit) {
 }
 
 @Composable
-fun TriggeredEffect(uiState: Any?, trigger: Boolean, block: suspend CoroutineScope.() -> Unit) {
-    var state: Boolean? by rememberSaveable { mutableStateOf(null) }
-    val oldState = state
+fun TriggeredEffect(input: String, trigger: Boolean, block: suspend CoroutineScope.() -> Unit) {
+    var state: Boolean by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = uiState) {
-        if (uiState.isNotNull()) {
-            if (trigger != state) {
-                state = trigger
-                oldState?.let {
-                    block()
-                }
+    LaunchedEffect(key1 = trigger) {
+        if (trigger != state) {
+            state = trigger
+            if (input.isNotEmpty()) {
+                block()
             }
-        } else {
-            throw Exception("uiState can't be null!")
         }
     }
 }

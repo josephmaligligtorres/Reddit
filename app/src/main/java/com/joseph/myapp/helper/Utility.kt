@@ -82,7 +82,7 @@ fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpC
     }
 }
 
-fun createHttpBuilder(): OkHttpClient.Builder {
+fun createAuthApiHttpBuilder(): OkHttpClient.Builder {
     return OkHttpClient.Builder().apply {
         connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         writeTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
@@ -92,7 +92,7 @@ fun createHttpBuilder(): OkHttpClient.Builder {
     }
 }
 
-fun createAuthenticatorHttpBuilder(): OkHttpClient.Builder {
+fun createDataApiHttpBuilder(): OkHttpClient.Builder {
     return OkHttpClient.Builder().apply {
         connectTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
         writeTimeout(REQUEST_TIME_OUT, TimeUnit.SECONDS)
@@ -103,25 +103,26 @@ fun createAuthenticatorHttpBuilder(): OkHttpClient.Builder {
     }
 }
 
-fun createDataApi(): DataApi {
-    return createApi(
-        okHttpClient = createHttpClient(
-            isAuthApi = false,
-            builder = createAuthenticatorHttpBuilder()
-        ),
-        factory = RxJava2CallAdapterFactory.create(),
-        baseUrl = BuildConfig.BASE_DATA_API_URL
-    )
-}
-
 fun createAuthApi(): AuthApi {
     return createApi(
         okHttpClient = createHttpClient(
             isAuthApi = true,
-            builder = createHttpBuilder()
+            builder = createAuthApiHttpBuilder()
         ),
         factory = RxJava2CallAdapterFactory.create(),
         baseUrl = BuildConfig.BASE_AUTH_API_URL
+    )
+}
+
+
+fun createDataApi(): DataApi {
+    return createApi(
+        okHttpClient = createHttpClient(
+            isAuthApi = false,
+            builder = createDataApiHttpBuilder()
+        ),
+        factory = RxJava2CallAdapterFactory.create(),
+        baseUrl = BuildConfig.BASE_DATA_API_URL
     )
 }
 

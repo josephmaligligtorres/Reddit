@@ -54,7 +54,7 @@ fun MainScreen(
         val uiState by uiState.collectAsState()
 
         TriggeredEffect(
-            uiState = uiState,
+            input = uiState.error,
             trigger = uiState.errorTrigger
         ) {
             scaffoldState.snackbarHostState.showSnackbar(uiState.error)

@@ -32,11 +32,21 @@ class MainViewModel @Inject constructor(
     private val getAllRedditsUseCase: GetAllRedditsUseCase
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(MainUiState())
+
     val uiState = viewModelState.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         viewModelState.value
     )
+
+    val onTriggerError: (String) -> Unit = { message ->
+        viewModelState.update {
+            it.copy(
+                error = message,
+                errorTrigger = !it.errorTrigger
+            )
+        }
+    }
 
     val onLoadSubreddits: () -> Unit = {
         viewModelScope.launch {
@@ -48,12 +58,7 @@ class MainViewModel @Inject constructor(
 
             when (val result = withContext(Dispatchers.IO) { getSubredditsUseCase() }) {
                 is ResponseResult.Error -> {
-                    viewModelState.update {
-                        it.copy(
-                            error = result.message,
-                            errorTrigger = !it.errorTrigger
-                        )
-                    }
+                    onTriggerError(result.message)
                 }
             }
 
@@ -99,6 +104,7 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+
         onLoadSubreddits()
     }
 }

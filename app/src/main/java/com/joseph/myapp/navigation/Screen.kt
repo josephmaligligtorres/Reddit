@@ -5,7 +5,7 @@ import com.joseph.myapp.helper.NavKey
 import com.joseph.myapp.helper.generateNavArgument
 import com.joseph.myapp.helper.generateNavData
 
-sealed class Screen(protected val route: String) : NavComponent {
+sealed class Screen(val route: String) : NavComponent {
     object SplashScreen : Screen("Screen.SplashScreen") {
         override fun component(vararg safeArgs: Any?): NavData {
             return generateNavData(
