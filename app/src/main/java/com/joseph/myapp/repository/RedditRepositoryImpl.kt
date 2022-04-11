@@ -8,11 +8,11 @@ class RedditRepositoryImpl(
     private val remoteDataSource: RedditRemoteDataSource,
     private val localDataSource: RedditLocalDataSource,
 ) : RedditRepository {
-    override suspend fun getSubreddits(): ResponseResult<Unit> {
-        return remoteDataSource.getSubreddits()
+    override suspend fun getReddits(): ResponseResult<Unit> {
+        return remoteDataSource.getReddits()
     }
 
-    override fun getAllReddits(): Flow<List<Reddit>> {
-        return localDataSource.getAllReddits()
+    override fun getLocalReddits(): Flow<List<Reddit>> {
+        return localDataSource.getLocalReddits()
     }
 }

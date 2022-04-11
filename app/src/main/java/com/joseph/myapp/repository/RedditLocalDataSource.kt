@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 class RedditLocalDataSource(
     private val redditDao: RedditDao
 ) : RedditDataSource {
-    override suspend fun getSubreddits(): ResponseResult<Unit> {
+    override suspend fun getReddits(): ResponseResult<Unit> {
         TODO("Not yet implemented")
     }
 
-    override fun getAllReddits(): Flow<List<Reddit>> {
-        return redditDao.getAllReddits()
+    override fun getLocalReddits(): Flow<List<Reddit>> {
+        return redditDao.getLocalReddits()
     }
 
     override suspend fun insertReddit(reddit: Reddit) {

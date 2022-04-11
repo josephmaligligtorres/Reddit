@@ -3,15 +3,16 @@ package com.joseph.myapp.ui.main
 import androidx.lifecycle.viewModelScope
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.ResponseResult
-import com.joseph.myapp.domain.GetAllRedditsUseCase
-import com.joseph.myapp.domain.GetSubredditsUseCase
+import com.joseph.myapp.domain.RedditUseCase
+import com.joseph.myapp.domain.RedditUseCaseType
 import com.joseph.myapp.helper.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,8 +29,7 @@ data class MainUiState(
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getSubredditsUseCase: GetSubredditsUseCase,
-    private val getAllRedditsUseCase: GetAllRedditsUseCase
+    private val redditUseCase: RedditUseCase
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(MainUiState())
 
@@ -56,7 +56,13 @@ class MainViewModel @Inject constructor(
                 )
             }
 
-            when (val result = withContext(Dispatchers.IO) { getSubredditsUseCase() }) {
+            when (
+                val result = withContext(Dispatchers.IO) {
+                    redditUseCase<ResponseResult<Unit>>(
+                        type = RedditUseCaseType.GET_REMOTE_SUBREDDITS
+                    )
+                }
+            ) {
                 is ResponseResult.Error -> {
                     onTriggerError(result.error)
                 }
@@ -96,7 +102,9 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getAllRedditsUseCase().collect { reddits ->
+            redditUseCase<Flow<List<Reddit>>>(
+                type = RedditUseCaseType.GET_LOCAL_SUBREDDITS
+            ).collect { reddits ->
                 viewModelState.update {
                     it.copy(
                         reddits = reddits

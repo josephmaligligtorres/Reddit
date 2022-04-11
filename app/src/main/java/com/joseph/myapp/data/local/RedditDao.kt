@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RedditDao {
     @Query("SELECT * FROM tbl_reddit")
-    fun getAllReddits(): Flow<List<Reddit>>
+    fun getLocalReddits(): Flow<List<Reddit>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertReddit(reddit: Reddit)

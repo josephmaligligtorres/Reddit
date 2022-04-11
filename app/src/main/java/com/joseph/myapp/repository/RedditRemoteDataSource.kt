@@ -16,7 +16,7 @@ class RedditRemoteDataSource(
     private val redditDao: RedditDao,
     private val context: WeakReference<Context>
 ) : RedditDataSource {
-    override suspend fun getSubreddits(): ResponseResult<Unit> {
+    override suspend fun getReddits(): ResponseResult<Unit> {
         return when (val response = createDataApi().getSubreddits()) {
             is NetworkResponse.Success -> {
                 val reddits = response.body.toReddits()
@@ -41,7 +41,7 @@ class RedditRemoteDataSource(
         }
     }
 
-    override fun getAllReddits(): Flow<List<Reddit>> {
+    override fun getLocalReddits(): Flow<List<Reddit>> {
         TODO("Not yet implemented")
     }
 
