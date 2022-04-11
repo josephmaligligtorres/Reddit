@@ -27,16 +27,13 @@ class RedditRemoteDataSource(
                 ResponseResult.Success(Unit)
             }
             is NetworkResponse.ServerError -> {
-                val message = getHttpStatus(response.code)?.reasonPhrase.toString()
-                ResponseResult.Error(message)
+                ResponseResult.Error(getHttpStatus(response.code)?.reasonPhrase.toString())
             }
             is NetworkResponse.NetworkError -> {
-                val message = decodeNetworkError(response.error, context)
-                ResponseResult.Error(message)
+                ResponseResult.Error(decodeNetworkError(response.error, context))
             }
             is NetworkResponse.UnknownError -> {
-                val message = decodeUnknownError(response.error, context)
-                ResponseResult.Error(message)
+                ResponseResult.Error(decodeUnknownError(response.error, context))
             }
         }
     }

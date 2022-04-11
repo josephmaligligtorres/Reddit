@@ -143,4 +143,3 @@ data class ChildData(
     @SerializedName("is_chat_post_feature_enabled") val isChatPostFeatureEnabled: Boolean? = null,
     @SerializedName("content_category") val contentCategory: String? = null
 )
-
