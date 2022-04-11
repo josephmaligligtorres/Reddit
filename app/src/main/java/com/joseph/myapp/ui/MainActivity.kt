@@ -11,7 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.joseph.myapp.navigation.NavDirection
+import com.joseph.myapp.navigation.NavDestination
 import com.joseph.myapp.navigation.SetupNavGraph
 import com.joseph.myapp.theme.MyTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
             MyTheme {
                 val navController = rememberNavController()
-                val navDirection = NavDirection(navController)
+                val navDestination = NavDestination(navController)
                 val scaffoldState = rememberScaffoldState()
 
                 Scaffold(
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SetupNavGraph(
                             navController = navController,
-                            navDirection = navDirection,
+                            navDestination = navDestination,
                             scaffoldState = scaffoldState
                         )
                     }

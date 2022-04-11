@@ -1,12 +1,11 @@
 package com.joseph.myapp.ui.main
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.ResponseResult
-import com.joseph.myapp.navigation.NavDirection
 import com.joseph.myapp.domain.GetAllRedditsUseCase
 import com.joseph.myapp.domain.GetSubredditsUseCase
+import com.joseph.myapp.helper.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +22,7 @@ data class MainUiState(
     val searchedReddits: List<Reddit> = listOf(),
     val isLoadingSubreddits: Boolean = false,
     val searchInput: String = "",
-    val errorMessage: String = "",
+    val error: String = "",
     val errorTrigger: Boolean = false
 )
 
@@ -31,18 +30,13 @@ data class MainUiState(
 class MainViewModel @Inject constructor(
     private val getSubredditsUseCase: GetSubredditsUseCase,
     private val getAllRedditsUseCase: GetAllRedditsUseCase
-) : ViewModel() {
-    private lateinit var navDirection: NavDirection
+) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(MainUiState())
     val uiState = viewModelState.stateIn(
         viewModelScope,
         SharingStarted.Eagerly,
         viewModelState.value
     )
-
-    val onSetup: (NavDirection) -> Unit = { navDirection ->
-        this.navDirection = navDirection
-    }
 
     val onLoadSubreddits: () -> Unit = {
         viewModelScope.launch {
@@ -56,7 +50,7 @@ class MainViewModel @Inject constructor(
                 is ResponseResult.Error -> {
                     viewModelState.update {
                         it.copy(
-                            errorMessage = result.message,
+                            error = result.message,
                             errorTrigger = !it.errorTrigger
                         )
                     }
@@ -89,10 +83,6 @@ class MainViewModel @Inject constructor(
                 searchInput = searchInput
             )
         }
-    }
-
-    val onNavigateMainToReddit: (Reddit) -> Unit = { reddit ->
-        navDirection.mainToReddit(reddit)
     }
 
     private fun getState(): MainUiState {

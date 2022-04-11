@@ -10,14 +10,13 @@ import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.NavKey
 import com.joseph.myapp.helper.safeArgsDataClass
 import com.joseph.myapp.ui.main.MainScreen
-import com.joseph.myapp.ui.main.MainViewModel
 import com.joseph.myapp.ui.reddit.RedditScreen
 import com.joseph.myapp.ui.splash.SplashScreen
 
 @Composable
 fun SetupNavGraph(
     navController: NavHostController,
-    navDirection: NavDirection,
+    navDestination: NavDestination,
     scaffoldState: ScaffoldState
 ) {
     NavHost(
@@ -28,18 +27,17 @@ fun SetupNavGraph(
             route = Screen.SplashScreen.component().route
         ) {
             SplashScreen(
-                navDirection = navDirection
+                navDestination = navDestination
             )
         }
 
         composable(
             route = Screen.MainScreen.component().route
         ) {
-            val viewModel: MainViewModel = hiltViewModel()
-            viewModel.onSetup(navDirection)
             MainScreen(
+                navDestination = navDestination,
                 scaffoldState = scaffoldState,
-                viewModel = viewModel
+                viewModel = hiltViewModel()
             )
         }
 

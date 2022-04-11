@@ -3,7 +3,7 @@ package com.joseph.myapp.navigation
 import androidx.navigation.NavHostController
 import com.joseph.myapp.data.local.Reddit
 
-class NavDirection(private val navController: NavHostController) {
+class NavDestination(private val navController: NavHostController) {
     val closeSplashToMain: () -> Unit = {
         navController.navigate(
             route = Screen.MainScreen.component().safeArgs

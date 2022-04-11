@@ -40,11 +40,13 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.joseph.myapp.R
 import com.joseph.myapp.data.local.Reddit
 import com.joseph.myapp.helper.TriggeredEffect
+import com.joseph.myapp.navigation.NavDestination
 import com.joseph.myapp.theme.MyTheme
 import com.joseph.myapp.ui.common.TopBar
 
 @Composable
 fun MainScreen(
+    navDestination: NavDestination,
     scaffoldState: ScaffoldState,
     viewModel: MainViewModel
 ) {
@@ -55,14 +57,14 @@ fun MainScreen(
             uiState = uiState,
             trigger = uiState.errorTrigger
         ) {
-            scaffoldState.snackbarHostState.showSnackbar(uiState.errorMessage)
+            scaffoldState.snackbarHostState.showSnackbar(uiState.error)
         }
 
         MainContent(
             uiState = uiState,
             onLoadSubreddits = onLoadSubreddits,
             onSearchInputChanged = onSearchInputChanged,
-            onNavigateMainToReddit = onNavigateMainToReddit
+            onNavigateMainToReddit = navDestination.mainToReddit
         )
     }
 }

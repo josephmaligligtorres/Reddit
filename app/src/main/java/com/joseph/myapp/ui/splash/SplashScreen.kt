@@ -16,17 +16,17 @@ import androidx.compose.ui.unit.dp
 import com.joseph.myapp.R
 import com.joseph.myapp.helper.InitEffect
 import com.joseph.myapp.helper.SPLASH_SCREEN_DELAY
-import com.joseph.myapp.navigation.NavDirection
+import com.joseph.myapp.navigation.NavDestination
 import com.joseph.myapp.theme.MyTheme
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    navDirection: NavDirection
+    navDestination: NavDestination
 ) {
     InitEffect {
         delay(SPLASH_SCREEN_DELAY)
-        navDirection.closeSplashToMain()
+        navDestination.closeSplashToMain()
     }
 
     SplashContent()
