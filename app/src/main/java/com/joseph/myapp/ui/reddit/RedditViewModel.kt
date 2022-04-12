@@ -3,10 +3,7 @@ package com.joseph.myapp.ui.reddit
 import android.webkit.SslErrorHandler
 import androidx.lifecycle.viewModelScope
 import com.joseph.myapp.data.local.Reddit
-import com.joseph.myapp.domain.RedditUseCase
 import com.joseph.myapp.helper.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -18,10 +15,7 @@ data class RedditUiState(
     val errorTitle: String = ""
 )
 
-@HiltViewModel
-class RedditViewModel @Inject constructor(
-    private val redditUseCase: RedditUseCase
-) : BaseViewModel() {
+class RedditViewModel : BaseViewModel() {
     private val viewModelState = MutableStateFlow(RedditUiState())
 
     val uiState = viewModelState.stateIn(
