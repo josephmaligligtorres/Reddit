@@ -47,6 +47,9 @@ fun SetupNavGraph(
         ) {
             val reddit = it.safeArgsDataClass<Reddit>(NavKey.PARCELIZE_REDDIT.value) ?: Reddit()
             RedditScreen(
+                navDestination = navDestination,
+                scaffoldState = scaffoldState,
+                viewModel = hiltViewModel(),
                 reddit = reddit
             )
         }

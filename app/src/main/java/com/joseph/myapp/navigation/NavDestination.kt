@@ -4,7 +4,7 @@ import androidx.navigation.NavHostController
 import com.joseph.myapp.data.local.Reddit
 
 class NavDestination(private val navController: NavHostController) {
-    val closeSplashToMain: () -> Unit = {
+    val onCloseSplashToMain: () -> Unit = {
         navController.navigate(
             route = Screen.MainScreen.component().safeArgs
         ) {
@@ -14,7 +14,7 @@ class NavDestination(private val navController: NavHostController) {
         }
     }
 
-    val mainToReddit: (Reddit) -> Unit = { reddit ->
+    val onMainToReddit: (Reddit) -> Unit = { reddit ->
         navController.navigate(
             route = Screen.RedditScreen.component(reddit).safeArgs
         )
