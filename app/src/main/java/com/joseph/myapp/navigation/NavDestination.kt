@@ -4,6 +4,10 @@ import androidx.navigation.NavHostController
 import com.joseph.myapp.data.local.Reddit
 
 class NavDestination(private val navController: NavHostController) {
+    val onBack: () -> Unit = {
+        navController.popBackStack()
+    }
+
     val onCloseSplashToMain: () -> Unit = {
         navController.navigate(
             route = Screen.MainScreen.component().safeArgs

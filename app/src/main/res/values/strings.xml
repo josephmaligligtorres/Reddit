@@ -9,6 +9,16 @@
     <string name="unknown_error_JsonSyntaxException_message">Invalid response.</string>
     <string name="unknown_error_else_message">An unexpected error occurred\nSorry for the inconvenience.</string>
 
+    <string name="untrusted_certificate_occurred">Untrusted Certificate Occurred</string>
+    <string name="hostname_mismatch_occurred">Hostname Mismatch Occurred</string>
+    <string name="invalid_certificate_date_occurred">The date of the certificate is invalid</string>
+    <string name="certificate_expired_occurred">The certificate has expired</string>
+    <string name="certificate_not_yet_valid_occurred">The certificate is not yet valid</string>
+    <string name="something_went_wrong">An unexpected error occurred \nSorry for the inconvenience.</string>
+    <string name="ssl_error_content">For your security, we wish to inform you that the site you are about to visit may not be secure.\n\nDo you wish to continue?</string>
+    <string name="yes_continue">Continue</string>
+    <string name="no_go_back">Go Back</string>
+
     <string name="search_hint">Search</string>
     <string name="subscribers">%s subscribers</string>
 </resources>
