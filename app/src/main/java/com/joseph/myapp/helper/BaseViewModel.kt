@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 abstract class BaseViewModel : ViewModel() {
     private var isInitialized = false
 
-    fun setup(action: () -> Unit) {
+    fun setup(onSetupEvent: () -> Unit) {
         if (!isInitialized) {
             isInitialized = true
-            action()
+            onSetupEvent()
         }
     }
 }

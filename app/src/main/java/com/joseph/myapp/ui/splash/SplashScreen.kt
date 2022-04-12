@@ -26,7 +26,7 @@ fun SplashScreen(
 ) {
     InitEffect {
         delay(SPLASH_SCREEN_DELAY)
-        navDestination.closeSplashToMain()
+        navDestination.onCloseSplashToMain()
     }
 
     SplashContent()

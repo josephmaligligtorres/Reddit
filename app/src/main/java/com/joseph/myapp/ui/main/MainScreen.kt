@@ -65,7 +65,7 @@ fun MainScreen(
                 uiState = uiState,
                 onLoadSubreddits = onLoadSubreddits,
                 onSearchInputChanged = onSearchInputChanged,
-                onNavigateMainToReddit = navDestination.mainToReddit
+                onNavigateMainToReddit = navDestination.onMainToReddit
             )
         }
     }
