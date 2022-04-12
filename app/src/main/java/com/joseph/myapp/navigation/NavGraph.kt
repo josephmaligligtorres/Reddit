@@ -11,6 +11,7 @@ import com.joseph.myapp.helper.NavKey
 import com.joseph.myapp.helper.safeArgsDataClass
 import com.joseph.myapp.ui.main.MainScreen
 import com.joseph.myapp.ui.reddit.RedditScreen
+import com.joseph.myapp.ui.reddit.RedditViewModel
 import com.joseph.myapp.ui.splash.SplashScreen
 
 @Composable
@@ -46,11 +47,17 @@ fun SetupNavGraph(
             arguments = Screen.RedditScreen.component().arguments
         ) {
             val reddit = it.safeArgsDataClass<Reddit>(NavKey.PARCELIZE_REDDIT.value) ?: Reddit()
+            val viewModel: RedditViewModel = hiltViewModel()
+
+            with(viewModel) {
+                setup {
+                    onStoreReddit(reddit)
+                }
+            }
+
             RedditScreen(
                 navDestination = navDestination,
-                scaffoldState = scaffoldState,
-                viewModel = hiltViewModel(),
-                reddit = reddit
+                viewModel = viewModel
             )
         }
     }
