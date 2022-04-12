@@ -20,6 +20,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,16 +33,23 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.joseph.myapp.R
 import com.joseph.myapp.helper.isNotNull
+import com.joseph.myapp.helper.isNull
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebView(
     modifier: Modifier = Modifier,
     url: String,
-    onStoreHandler: (SslErrorHandler?, String) -> Unit
+    onBack: () -> Unit
 ) {
-    var backEnabled by rememberSaveable { mutableStateOf(false) }
-    var webView: WebView? = null
+    var backSwitch by rememberSaveable { mutableStateOf(false) }
+    var title by rememberSaveable { mutableStateOf("") }
+    var handler: SslErrorHandler? by remember { mutableStateOf(null) }
+    var webView: WebView? by remember { mutableStateOf(null) }
+
+    if (handler.isNull() && title.isNotEmpty()) {
+        onBack()
+    }
 
     AndroidView(
         modifier = modifier,
@@ -54,20 +62,20 @@ fun WebView(
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                        backEnabled = view.canGoBack()
+                        backSwitch = view.canGoBack()
                     }
 
-                    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-                        val errorTitle = when (error?.primaryError) {
-                            SslError.SSL_NOTYETVALID -> it.getString(R.string.certificate_not_yet_valid_occurred)
-                            SslError.SSL_EXPIRED -> it.getString(R.string.certificate_expired_occurred)
-                            SslError.SSL_IDMISMATCH -> it.getString(R.string.hostname_mismatch_occurred)
-                            SslError.SSL_UNTRUSTED -> it.getString(R.string.untrusted_certificate_occurred)
-                            SslError.SSL_DATE_INVALID -> it.getString(R.string.invalid_certificate_date_occurred)
+                    override fun onReceivedSslError(view: WebView?, _handler: SslErrorHandler?, error: SslError?) {
+                        title = when (error?.primaryError) {
+                            SslError.SSL_NOTYETVALID -> it.getString(R.string.ssl_not_yet_valid_title)
+                            SslError.SSL_EXPIRED -> it.getString(R.string.ssl_expired_title)
+                            SslError.SSL_IDMISMATCH -> it.getString(R.string.ssl_id_mismatch_title)
+                            SslError.SSL_UNTRUSTED -> it.getString(R.string.ssl_untrusted_title)
+                            SslError.SSL_DATE_INVALID -> it.getString(R.string.ssl_date_invalid_title)
                             else -> it.getString(R.string.something_went_wrong)
                         }
 
-                        onStoreHandler(handler, errorTitle)
+                        handler = _handler
                     }
                 }
 
@@ -83,24 +91,35 @@ fun WebView(
         }
     )
 
-    BackHandler(enabled = backEnabled) {
+    BackHandler(enabled = backSwitch) {
         webView?.goBack()
     }
+
+    SslErrorDialog(
+        handler = handler,
+        title = title,
+        onCloseDialog = {
+            handler = null
+            title = ""
+        },
+        onBack = onBack
+    )
 }
 
 @Composable
 fun SslErrorDialog(
     handler: SslErrorHandler?,
-    errorTitle: String,
+    title: String,
     onCloseDialog: () -> Unit,
     onBack: () -> Unit
 ) {
     if (handler.isNotNull()) {
         AlertDialog(
+            backgroundColor = Color(0xFFFFFFFF),
             onDismissRequest = {},
             title = {
                 Text(
-                    text = errorTitle,
+                    text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 19.sp,
                     color = Color(0xFF000000)
