@@ -142,10 +142,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     /**
-     * Secured preferences
+     * Secure preferences
      */
-    def secured_prefs_version = '0.1.7'
-    implementation "com.scottyab:secure-preferences-lib:$secured_prefs_version"
+    def secure_prefs_version = '0.1.7'
+    implementation "com.scottyab:secure-preferences-lib:$secure_prefs_version"
 
     /**
      * Database
