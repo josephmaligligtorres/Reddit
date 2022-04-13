@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -30,9 +31,10 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     scaffoldState = scaffoldState
-                ) {
+                ) { scaffoldPadding ->
                     Surface(
                         modifier = Modifier
+                            .padding(scaffoldPadding)
                             .fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {

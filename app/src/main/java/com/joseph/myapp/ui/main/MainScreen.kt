@@ -86,9 +86,10 @@ fun MainContent(
                     onSearchInputChanged = onSearchInputChanged
                 )
             }
-        ) {
+        ) { scaffoldPadding ->
             Column(
                 modifier = Modifier
+                    .padding(scaffoldPadding)
                     .fillMaxSize()
                     .background(Color(0xFFFFFFFF))
             ) {
