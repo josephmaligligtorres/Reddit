@@ -1,7 +1,7 @@
 package com.joseph.myapp.helper
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.api.request.RefreshTokenRequest
+import com.joseph.myapp.data.remote.api.request.RefreshTokenRequest
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request

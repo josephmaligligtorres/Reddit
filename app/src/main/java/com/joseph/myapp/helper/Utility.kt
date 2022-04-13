@@ -14,8 +14,8 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.joseph.myapp.BuildConfig
 import com.joseph.myapp.R
-import com.joseph.myapp.api.endpoint.AuthApi
-import com.joseph.myapp.api.endpoint.DataApi
+import com.joseph.myapp.data.remote.api.endpoint.AuthApi
+import com.joseph.myapp.data.remote.api.endpoint.DataApi
 import com.joseph.myapp.navigation.CustomNavType
 import com.joseph.myapp.navigation.NavData
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package com.joseph.myapp.data.remote
+package com.joseph.myapp.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 import com.joseph.myapp.data.local.Reddit

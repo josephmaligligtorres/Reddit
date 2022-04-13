@@ -1,4 +1,4 @@
-package com.joseph.myapp.api.request
+package com.joseph.myapp.data.remote.api.request
 
 import com.joseph.myapp.BuildConfig
 

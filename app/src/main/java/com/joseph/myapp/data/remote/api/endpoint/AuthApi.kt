@@ -1,7 +1,7 @@
-package com.joseph.myapp.api.endpoint
+package com.joseph.myapp.data.remote.api.endpoint
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.joseph.myapp.data.remote.RefreshTokenResponse
+import com.joseph.myapp.data.remote.dto.RefreshTokenResponse
 import okhttp3.ResponseBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
