@@ -1,7 +1,6 @@
 package com.joseph.myapp.ui.common
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.net.http.SslError
 import android.view.ViewGroup
 import android.webkit.SslErrorHandler
@@ -42,45 +41,64 @@ fun WebView(
     url: String,
     onBack: () -> Unit
 ) {
-    var backSwitch by rememberSaveable { mutableStateOf(false) }
     var title by rememberSaveable { mutableStateOf("") }
     var handler: SslErrorHandler? by remember { mutableStateOf(null) }
-    var webView: WebView? by remember { mutableStateOf(null) }
+    var webView: WebView? = null
 
     if (handler.isNull() && title.isNotEmpty()) {
         onBack()
     }
 
+    BackHandler {
+        if (webView.isNotNull() && webView?.canGoBack() == true) {
+            webView?.goBack()
+        } else {
+            onBack()
+        }
+    }
+
     AndroidView(
         modifier = modifier,
-        factory = {
-            WebView(it).apply {
+        factory = { context ->
+            WebView(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
 
                 webViewClient = object : WebViewClient() {
-                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                        backSwitch = view.canGoBack()
-                    }
-
                     override fun onReceivedSslError(view: WebView?, _handler: SslErrorHandler?, error: SslError?) {
-                        title = when (error?.primaryError) {
-                            SslError.SSL_NOTYETVALID -> it.getString(R.string.ssl_not_yet_valid_title)
-                            SslError.SSL_EXPIRED -> it.getString(R.string.ssl_expired_title)
-                            SslError.SSL_IDMISMATCH -> it.getString(R.string.ssl_id_mismatch_title)
-                            SslError.SSL_UNTRUSTED -> it.getString(R.string.ssl_untrusted_title)
-                            SslError.SSL_DATE_INVALID -> it.getString(R.string.ssl_date_invalid_title)
-                            else -> it.getString(R.string.something_went_wrong)
+                        title = with(context) {
+                            when (error?.primaryError) {
+                                SslError.SSL_NOTYETVALID -> {
+                                    getString(R.string.ssl_not_yet_valid_title)
+                                }
+                                SslError.SSL_EXPIRED -> {
+                                    getString(R.string.ssl_expired_title)
+                                }
+                                SslError.SSL_IDMISMATCH -> {
+                                    getString(R.string.ssl_id_mismatch_title)
+                                }
+                                SslError.SSL_UNTRUSTED -> {
+                                    getString(R.string.ssl_untrusted_title)
+                                }
+                                SslError.SSL_DATE_INVALID -> {
+                                    getString(R.string.ssl_date_invalid_title)
+                                }
+                                else -> {
+                                    getString(R.string.something_went_wrong)
+                                }
+                            }
                         }
 
                         handler = _handler
                     }
                 }
 
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
+                settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                }
 
                 loadUrl(url)
                 webView = this
@@ -90,10 +108,6 @@ fun WebView(
             webView = it
         }
     )
-
-    BackHandler(enabled = backSwitch) {
-        webView?.goBack()
-    }
 
     SslErrorDialog(
         handler = handler,
