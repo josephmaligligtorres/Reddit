@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -164,7 +165,7 @@ fun SslErrorDialog(
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Normal,
                         fontSize = 15.sp,
-                        color = Color(0xFF336699)
+                        color = MaterialTheme.colors.primary
                     )
 
                     Spacer(
@@ -182,7 +183,7 @@ fun SslErrorDialog(
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Normal,
                         fontSize = 15.sp,
-                        color = Color(0xFF336699)
+                        color = MaterialTheme.colors.primary
                     )
                 }
             }
