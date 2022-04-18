@@ -193,7 +193,7 @@ fun generateNavData(route: String, vararg safeArgs: Any?, arguments: List<NamedN
                         data
                     }
 
-                    "?${argument.name}=${newData ?: " "}"
+                    "?${argument.name}=${newData ?: ""}"
                 }
 
                 append(newData)
