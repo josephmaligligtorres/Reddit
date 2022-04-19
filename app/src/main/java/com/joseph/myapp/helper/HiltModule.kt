@@ -20,18 +20,13 @@ import javax.inject.Singleton
 object HiltModule {
     @Singleton
     @Provides
-    fun providesContext(
-        @ApplicationContext context: Context
-    ): WeakReference<Context> {
+    fun providesContext(@ApplicationContext context: Context): WeakReference<Context> {
         return WeakReference(context)
     }
 
     @Singleton
     @Provides
-    fun providesRedditRepository(
-        redditDao: RedditDao,
-        context: WeakReference<Context>
-    ): RedditRepository {
+    fun providesRedditRepository(redditDao: RedditDao, context: WeakReference<Context>): RedditRepository {
         return RedditRepositoryImpl(
             remoteDataSource = RedditRemoteDataSource(
                 redditDao = redditDao,
@@ -45,17 +40,13 @@ object HiltModule {
 
     @Singleton
     @Provides
-    fun providesAppDatabase(
-        @ApplicationContext context: Context
-    ): AppDatabase {
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase.getDatabase(context)
     }
 
     @Singleton
     @Provides
-    fun providesRedditDao(
-        appDatabase: AppDatabase
-    ): RedditDao {
+    fun providesRedditDao(appDatabase: AppDatabase): RedditDao {
         return appDatabase.getRedditDao()
     }
 }
