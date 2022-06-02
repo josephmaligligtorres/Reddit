@@ -1,18 +1,22 @@
 package com.joseph.myapp.helper
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.joseph.myapp.BuildConfig
+import com.joseph.myapp.data.remote.api.endpoint.AuthApi
 import com.joseph.myapp.data.remote.api.request.RefreshTokenRequest
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
+import okhttp3.Credentials
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class TokenAuthenticator : Authenticator {
     private var retryCounter = 0
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (getHttpStatus(response.code) != HttpStatus.UNAUTHORIZED || retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
+        if (retryCounter == TOKEN_AUTHENTICATOR_LIMIT) {
             return null
         }
 
@@ -36,7 +40,7 @@ class TokenAuthenticator : Authenticator {
     private suspend fun refreshToken(): ResponseResult<String> {
         return when (
             val response = with(RefreshTokenRequest()) {
-                createAuthApi().refreshToken(
+                api().refreshToken(
                     grantType = grantType,
                     refreshToken = refreshToken
                 )
@@ -49,5 +53,16 @@ class TokenAuthenticator : Authenticator {
                 ResponseResult.Error("")
             }
         }
+    }
+
+    private fun api(): AuthApi {
+        return createApi(
+            okHttpClient = createHttpClient(
+                token = { Credentials.basic(BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET) },
+                builder = createAuthApiHttpBuilder()
+            ),
+            factory = RxJava2CallAdapterFactory.create(),
+            baseUrl = BuildConfig.BASE_AUTH_API_URL
+        )
     }
 }

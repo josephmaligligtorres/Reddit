@@ -14,8 +14,6 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.joseph.myapp.BuildConfig
 import com.joseph.myapp.R
-import com.joseph.myapp.data.remote.api.endpoint.AuthApi
-import com.joseph.myapp.data.remote.api.endpoint.DataApi
 import com.joseph.myapp.navigation.CustomNavType
 import com.joseph.myapp.navigation.NavData
 import okhttp3.OkHttpClient
@@ -30,8 +28,6 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLPeerUnverifiedException
-import okhttp3.Credentials
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 inline fun <reified T> createApi(okHttpClient: OkHttpClient, factory: CallAdapter.Factory, baseUrl: String): T {
     return Retrofit.Builder().run {
@@ -44,13 +40,7 @@ inline fun <reified T> createApi(okHttpClient: OkHttpClient, factory: CallAdapte
     }
 }
 
-fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpClient {
-    val authorization = if (isAuthApi) {
-        Credentials.basic(BuildConfig.CLIENT_ID, BuildConfig.CLIENT_SECRET)
-    } else {
-        getBearerToken()
-    }
-
+fun createHttpClient(token: () -> String, builder: OkHttpClient.Builder): OkHttpClient {
     return builder.run {
         addInterceptor { chain ->
             val oldRequest = chain.request()
@@ -58,7 +48,7 @@ fun createHttpClient(isAuthApi: Boolean, builder: OkHttpClient.Builder): OkHttpC
                 addHeader("Connection", "close")
                 addHeader("Accept", "application/json")
                 addHeader("Content-Type", "application/json")
-                addHeader("Authorization", authorization)
+                addHeader("Authorization", token())
                 method(oldRequest.method, oldRequest.body)
                 build()
             }
@@ -101,29 +91,6 @@ fun createDataApiHttpBuilder(): OkHttpClient.Builder {
         followRedirects(false)
         followSslRedirects(false)
     }
-}
-
-fun createAuthApi(): AuthApi {
-    return createApi(
-        okHttpClient = createHttpClient(
-            isAuthApi = true,
-            builder = createAuthApiHttpBuilder()
-        ),
-        factory = RxJava2CallAdapterFactory.create(),
-        baseUrl = BuildConfig.BASE_AUTH_API_URL
-    )
-}
-
-
-fun createDataApi(): DataApi {
-    return createApi(
-        okHttpClient = createHttpClient(
-            isAuthApi = false,
-            builder = createDataApiHttpBuilder()
-        ),
-        factory = RxJava2CallAdapterFactory.create(),
-        baseUrl = BuildConfig.BASE_DATA_API_URL
-    )
 }
 
 fun decodeUnknownError(throwable: Throwable, context: WeakReference<Context>): String {
